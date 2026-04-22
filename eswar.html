@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Catch Me 😏</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  overflow:hidden;
+  text-align:center;
+  background:#111;
+  color:white;
+}
+
+.hidden{display:none}
+
+/* BUTTON GAME */
+#gameBtn{
+  position:absolute;
+  padding:15px 25px;
+  border:none;
+  border-radius:30px;
+  background:#ff4b5c;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 0 20px #ff4b5c;
+}
+
+#hud{
+  position:fixed;
+  top:10px;
+  left:10px;
+  font-size:16px;
+}
+
+.taunt{
+  position:absolute;
+  font-size:18px;
+  color:#fff;
+  animation:fade 1s;
+}
+@keyframes fade{
+  from{opacity:1}
+  to{opacity:0}
+}
+
+/* MESSAGE CARD */
+.card{
+  background:linear-gradient(135deg,#ffd700,#ffcc70);
+  color:black;
+  padding:25px;
+  border-radius:20px;
+  width:300px;
+  margin:auto;
+  margin-top:100px;
+  box-shadow:0 0 30px gold;
+}
+
+/* GIFT */
+.gift{
+  font-size:80px;
+  cursor:pointer;
+  margin-top:20px;
+  animation:bounce 1s infinite;
+}
+@keyframes bounce{
+  50%{transform:translateY(-10px)}
+}
+
+/* LOVE PARADISE */
+#love{
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  height:100vh;
+  width:100%;
+  position:fixed;
+  top:0;
+  left:0;
+}
+
+.fall{
+  position:absolute;
+  font-size:25px;
+  animation:fall 5s linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(-10vh)}
+  100%{transform:translateY(110vh)}
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  max-width:300px;
+  margin:40px auto;
+}
+
+.box{
+  background:white;
+  color:black;
+  padding:15px;
+  border-radius:10px;
+  font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- GAME -->
+<div id="hud">Caught: 0 | Missed: 0</div>
+<button id="gameBtn" onclick="catchBtn()">Click Me 😏</button>
+
+<!-- MESSAGE -->
+<div id="message" class="hidden">
+  <div class="card">
+    <h2>💌 For You</h2>
+    <p>
+      Hey 💕<br>
+      You’re one of the most special people in my life 🥺<br>
+      No matter what happens, I’ll always value you 💖
+    </p>
+    <p><i>"True friendship is a beautiful gift that lasts forever."</i></p>
+  </div>
+  <div class="gift" onclick="openGift()">🎁</div>
+</div>
+
+<!-- LOVE PARADISE -->
+<div id="love" class="hidden">
+  <h1>💖 For Eswar 💖</h1>
+
+  <div class="grid">
+    <div class="box">🌹 Rose</div>
+    <div class="box">🌸 Blossom</div>
+    <div class="box">💐 Bouquet</div>
+    <div class="box">🌺 Hibiscus</div>
+    <div class="box">🌷 Tulip</div>
+    <div class="box">🌼 Daisy</div>
+    <div class="box">💖 Love</div>
+    <div class="box">💕 Care</div>
+    <div class="box">🤍 Pure</div>
+  </div>
+
+  <p style="font-size:20px;">
+    You are someone who makes my world brighter 🌍✨<br>
+    I hope this little surprise made you smile 💗
+  </p>
+</div>
+
+<script>
+let caught=0, missed=0;
+
+let taunts=["Missed me 😂","Too slow 😜","Catch me if you can 😏","Oops again 🤭"];
+
+function moveBtn(){
+  let btn=document.getElementById("gameBtn");
+  let x=Math.random()*(window.innerWidth-100);
+  let y=Math.random()*(window.innerHeight-50);
+  btn.style.left=x+"px";
+  btn.style.top=y+"px";
+
+  missed++;
+  updateHUD();
+  showTaunt(x,y);
+}
+
+function catchBtn(){
+  caught++;
+  updateHUD();
+
+  if(caught>=5){
+    startConfetti();
+    document.getElementById("gameBtn").style.display="none";
+    document.getElementById("hud").style.display="none";
+    document.getElementById("message").classList.remove("hidden");
+  }
+}
+
+function updateHUD(){
+  document.getElementById("hud").innerText=
+  "Caught: "+caught+" | Missed: "+missed;
+}
+
+function showTaunt(x,y){
+  let t=document.createElement("div");
+  t.className="taunt";
+  t.innerText=taunts[Math.floor(Math.random()*taunts.length)];
+  t.style.left=x+"px";
+  t.style.top=y+"px";
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1000);
+}
+
+setInterval(moveBtn,1000);
+
+/* CONFETTI */
+function startConfetti(){
+  for(let i=0;i<50;i++){
+    let c=document.createElement("div");
+    c.className="fall";
+    c.innerHTML="🎊";
+    c.style.left=Math.random()*100+"vw";
+    c.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(c);
+  }
+}
+
+/* GIFT */
+function openGift(){
+  document.getElementById("message").classList.add("hidden");
+  document.getElementById("love").classList.remove("hidden");
+  startLoveRain();
+}
+
+/* LOVE RAIN */
+function startLoveRain(){
+  let items=["🌹","🌸","💖","💐","🌺","🌼","🌷","💝","💕","🤍"];
+  setInterval(()=>{
+    let f=document.createElement("div");
+    f.className="fall";
+    f.innerHTML=items[Math.floor(Math.random()*items.length)];
+    f.style.left=Math.random()*100+"vw";
+    f.style.animationDuration=(Math.random()*3+2)+"s";
+    document.body.appendChild(f);
+  },300);
+}
+</script>
+
+</body>
+</html>
